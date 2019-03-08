@@ -81,6 +81,7 @@ paths:
         - name: "mission"
           in: body
           description: "Mission request"
+          required: true
           schema:
             $ref: '#/definitions/Mission'
      responses:
@@ -108,6 +109,7 @@ paths:
         - name: "mission"
           in: body
           description: "Mission request"
+          required: true
           schema:
             $ref: '#/definitions/Mission'
      responses:
@@ -130,7 +132,6 @@ paths:
 
 
 definitions:
-
   MissionList:
     type: object
     properties:
@@ -182,8 +183,8 @@ definitions:
       team:
         type: string
         example: "team-id-123"
-      crtical:
-        $ref: '#/definitions/Crtitcality'
+      critical:
+        $ref: '#/definitions/Criticality'
       comments:
         type: array
         items:
@@ -205,7 +206,7 @@ definitions:
       - updated_at
       
   
-  Crtitcality:
+  Criticality:
     type: string
     x-extensible-enum:
       - hot-fix
@@ -233,12 +234,6 @@ parameters:
   team-id:
     name: team-id
     in: path
-    type: string
-    required: true
-    
-  sales_channel:
-    name: sales_channel
-    in: query
     type: string
     required: true
 
