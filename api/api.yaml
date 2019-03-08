@@ -1,0 +1,249 @@
+swagger: "2.0"
+info:
+  description: |
+   This REST-API would provide endpoints to manage missions/backlogs. 
+
+    **NOTE** : This is *Internal API* , i.e. it's meant to be exclusively used by/for the
+    tafel application. It's not a Platform API intended to be used by others.
+
+  version: "1.0.0"
+  title: "Tafel Missions API"
+  x-audience: "company-internal"
+  x-api-id: "AD1CB381-1612-422B-A322-19D4F1DFFE45"
+  contact:
+    name: "Github Issues"
+    url: "https://github.com/prambrucke/tafel/issues"
+host: "TBD"
+schemes:
+- "https"
+
+paths:
+  /teams/{team-id}/missions:
+    get:
+      description: |
+        Retrieves missions for the givesn team-id
+      # security:
+      # - oauth2:
+      #   - tafel-missions.read
+      produces:
+      - "application/json"
+      - "application/problem+json"
+      parameters:
+        - $ref: '#/parameters/team-id'
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/MissionList'
+        default:
+          description: Error occurred - see status code and problem object for information
+          schema:
+            $ref: '#/definitions/Problem'
+
+  /teams/{team-id}/missions/{mission-id}:
+    get:
+      description: |
+        Retrieves  mission details for the given tema-id and mission-id.
+      # security:
+      # - oauth2:
+      #   - balance-service.read
+      produces:
+      - "application/json"
+      - "application/problem+json"
+      parameters:
+        - $ref: '#/parameters/team-id'
+        - name: mission-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/Mission'
+        default:
+          description: Error occurred - see status code and problem object for information
+          schema:
+            $ref: '#/definitions/Problem'
+  
+    post:
+     description: |
+      Creates a new issue
+     produces:
+      - "application/json"
+      - "application/problem+json"
+     parameters:
+        - $ref: '#/parameters/team-id'
+        - name: mission-id
+          in: path
+          required: true
+          type: string
+        - name: "mission"
+          in: body
+          description: "Mission request"
+          schema:
+            $ref: '#/definitions/Mission'
+     responses:
+        201:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/Mission'
+        default:
+          description: Error occurred - see status code and problem object for information
+          schema:
+            $ref: '#/definitions/Problem'
+ 
+    put:
+     description: |
+      Updates a mission
+     produces:
+      - "application/json"
+      - "application/problem+json"
+     parameters:
+        - $ref: '#/parameters/team-id'
+        - name: mission-id
+          in: path
+          required: true
+          type: string
+        - name: "mission"
+          in: body
+          description: "Mission request"
+          schema:
+            $ref: '#/definitions/Mission'
+     responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/Mission'
+        default:
+          description: Error occurred - see status code and problem object for information
+          schema:
+            $ref: '#/definitions/Problem' 
+# securityDefinitions:
+#   oauth2:
+#     type: oauth2
+#     flow: application
+#     tokenUrl: 'https://token.services.auth.com/oauth2/access_token?realm=/services'
+#     scopes:
+#       balance-service.read: "Read access to the service API"
+
+
+
+definitions:
+
+  MissionList:
+    type: object
+    properties:
+      missions:
+        type: array
+        items:
+          $ref: '#/definitions/Mission'
+          
+  Mission:
+    type: object
+    properties:
+      id:
+        type: string
+        example: id
+      name:
+        type: string
+        example: "Mission heading"
+      description:
+        type: string
+        example: "Mission description in detail"
+        default: "Work in progress"
+      labels:
+        type: array
+        items:
+          type: string
+          example: "bug"
+          description: "Labels assigned to a mission"
+      estimation:
+        type: integer
+        example: 8
+      assignee_ids:
+        type: array
+        items:
+          type: string
+          example: "12345"
+          description: "User id of the assignee"
+      created_by:
+        type: string
+        example: "12345"
+        description: "User id of whome the mission was created by"
+      is_explored:
+        type: boolean
+        description: "true if the mission is still un explored (not yet worked on)"
+      status:
+        $ref: '#/definitions/MissionStatus'
+      sprint:
+        type: string
+        example: "Sprint 1"
+      team:
+        type: string
+        example: "team-id-123"
+      crtical:
+        $ref: '#/definitions/Crtitcality'
+      comments:
+        type: array
+        items:
+          type: string
+          example: "List of comments"
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+    required: 
+      - id
+      - name
+      - description
+      - created_by
+      - team
+      - created_at
+      - updated_at
+      
+  
+  Crtitcality:
+    type: string
+    x-extensible-enum:
+      - hot-fix
+      - critical
+      - normal
+      
+  MissionStatus:
+    type: string
+    x-extensible-enum:
+      - not-explored
+      - in-progress
+      - completed
+  
+  Problem:
+    type: object
+    properties:
+      error_code:
+        type: string
+        example: "NOT_FOUND"
+      message:
+        type: string
+        example: "Error description"
+      
+parameters:
+  team-id:
+    name: team-id
+    in: path
+    type: string
+    required: true
+    
+  sales_channel:
+    name: sales_channel
+    in: query
+    type: string
+    required: true
+
+  customer-number:
+    name: customer-number
+    in: path
+    type: string
+    required: true
