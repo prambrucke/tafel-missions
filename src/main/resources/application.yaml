@@ -1,0 +1,29 @@
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+
+    deserialization:
+      fail-on-null-for-primitives: true
+      use-big-decimal-for-floats: true
+      fail-on-unknown-properties: false
+      adjust-dates-to-context-time-zone: false
+    generator:
+      write-bigdecimal-as-plain: true
+    mapper:
+      sort-properties-alphabetically: true
+  endpoints:
+    enabled: false
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    loggers:
+      enabled: true
+  datasource:
+    url: "jdbc:postgresql://${DATABASE_HOST:localhost}:5432/missions"
+    username: postgres
+    password: postgres
+  flyway:
+    schemas: tafel_missions

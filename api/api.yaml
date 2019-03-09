@@ -1,10 +1,10 @@
 swagger: "2.0"
 info:
   description: |
-   This REST-API would provide endpoints to manage missions/backlogs. 
+    This REST-API would provide endpoints to manage missions/backlogs.
 
-    **NOTE** : This is *Internal API* , i.e. it's meant to be exclusively used by/for the
-    tafel application. It's not a Platform API intended to be used by others.
+     **NOTE** : This is *Internal API* , i.e. it's meant to be exclusively used by/for the
+     tafel application. It's not a Platform API intended to be used by others.
 
   version: "1.0.0"
   title: "Tafel Missions API"
@@ -29,12 +29,36 @@ paths:
       - "application/json"
       - "application/problem+json"
       parameters:
-        - $ref: '#/parameters/team-id'
+      - $ref: '#/parameters/team-id'
       responses:
         200:
           description: "Successful operation"
           schema:
             $ref: '#/definitions/MissionList'
+        default:
+          description: Error occurred - see status code and problem object for information
+          schema:
+            $ref: '#/definitions/Problem'
+
+    post:
+      description: |
+        Creates a new issue
+      produces:
+      - "application/json"
+      - "application/problem+json"
+      parameters:
+      - $ref: '#/parameters/team-id'
+      - name: "mission"
+        in: body
+        description: "Mission request"
+        required: true
+        schema:
+          $ref: '#/definitions/MissionDetail'
+      responses:
+        201:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/Mission'
         default:
           description: Error occurred - see status code and problem object for information
           schema:
@@ -51,11 +75,11 @@ paths:
       - "application/json"
       - "application/problem+json"
       parameters:
-        - $ref: '#/parameters/team-id'
-        - name: mission-id
-          in: path
-          required: true
-          type: string
+      - $ref: '#/parameters/team-id'
+      - name: mission-id
+        in: path
+        required: true
+        type: string
       responses:
         200:
           description: "Successful operation"
@@ -65,54 +89,26 @@ paths:
           description: Error occurred - see status code and problem object for information
           schema:
             $ref: '#/definitions/Problem'
-  
-    post:
-     description: |
-      Creates a new issue
-     produces:
-      - "application/json"
-      - "application/problem+json"
-     parameters:
-        - $ref: '#/parameters/team-id'
-        - name: mission-id
-          in: path
-          required: true
-          type: string
-        - name: "mission"
-          in: body
-          description: "Mission request"
-          required: true
-          schema:
-            $ref: '#/definitions/Mission'
-     responses:
-        201:
-          description: "Successful operation"
-          schema:
-            $ref: '#/definitions/Mission'
-        default:
-          description: Error occurred - see status code and problem object for information
-          schema:
-            $ref: '#/definitions/Problem'
- 
+
     put:
-     description: |
-      Updates a mission
-     produces:
+      description: |
+        Updates a mission
+      produces:
       - "application/json"
       - "application/problem+json"
-     parameters:
-        - $ref: '#/parameters/team-id'
-        - name: mission-id
-          in: path
-          required: true
-          type: string
-        - name: "mission"
-          in: body
-          description: "Mission request"
-          required: true
-          schema:
-            $ref: '#/definitions/Mission'
-     responses:
+      parameters:
+      - $ref: '#/parameters/team-id'
+      - name: mission-id
+        in: path
+        required: true
+        type: string
+      - name: "mission"
+        in: body
+        description: "Mission request"
+        required: true
+        schema:
+          $ref: '#/definitions/MissionDetail'
+      responses:
         200:
           description: "Successful operation"
           schema:
@@ -120,7 +116,7 @@ paths:
         default:
           description: Error occurred - see status code and problem object for information
           schema:
-            $ref: '#/definitions/Problem' 
+            $ref: '#/definitions/Problem'
 # securityDefinitions:
 #   oauth2:
 #     type: oauth2
@@ -132,20 +128,11 @@ paths:
 
 
 definitions:
-  MissionList:
+
+
+  MissionDetail:
     type: object
     properties:
-      missions:
-        type: array
-        items:
-          $ref: '#/definitions/Mission'
-          
-  Mission:
-    type: object
-    properties:
-      id:
-        type: string
-        example: id
       name:
         type: string
         example: "Mission heading"
@@ -180,7 +167,7 @@ definitions:
       sprint:
         type: string
         example: "Sprint 1"
-      team:
+      team_id:
         type: string
         example: "team-id-123"
       critical:
@@ -196,30 +183,49 @@ definitions:
       updated_at:
         type: string
         format: date-time
-    required: 
-      - id
-      - name
-      - description
-      - created_by
-      - team
-      - created_at
-      - updated_at
-      
-  
+    required:
+    - name
+    - description
+    - created_by
+    - team
+    - created_at
+    - updated_at
+
+  MissionList:
+    type: object
+    properties:
+      missions:
+        type: array
+        items:
+          $ref: '#/definitions/Mission'
+
+  Mission:
+    type: object
+    properties:
+      id:
+        type: string
+        example: id
+      mission_detail:
+        $ref: '#/definitions/MissionDetail'
+    required:
+    - id
+    - mission_detail
+
+
   Criticality:
     type: string
     x-extensible-enum:
-      - hot-fix
-      - critical
-      - normal
-      
+    - hot-fix
+    - critical
+    - normal
+
   MissionStatus:
     type: string
     x-extensible-enum:
-      - not-explored
-      - in-progress
-      - completed
-  
+    - not-explored
+    - in-progress
+    - completed
+
   Problem:
     type: object
     properties:
@@ -229,16 +235,10 @@ definitions:
       message:
         type: string
         example: "Error description"
-      
+
 parameters:
   team-id:
     name: team-id
-    in: path
-    type: string
-    required: true
-
-  customer-number:
-    name: customer-number
     in: path
     type: string
     required: true
