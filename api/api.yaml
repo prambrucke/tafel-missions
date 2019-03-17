@@ -21,7 +21,7 @@ paths:
   /teams/{team-id}/missions:
     get:
       description: |
-        Retrieves missions for the givesn team-id
+        Retrieves missions for the givesn team-id .It returns first 10 results ordered by critcality(high to low)) and created date(descending)
       # security:
       # - oauth2:
       #   - tafel-missions.read
@@ -30,9 +30,38 @@ paths:
       - "application/problem+json"
       parameters:
       - $ref: '#/parameters/team-id'
+      - name: "cursor"
+        in: "query"
+        description: "Start point of the cursor to get paginated result. Given the number 1 it will return 10 results from the cursor 1"
+        required: true
+        type: integer
+      - name: "labels"
+        in: "query"
+        description: "Multiple Labels that need to be filtered. ex.bug,team (can also be comma seperated)"
+        required: false
+        type: "string"
+      - name: "assignee"
+        in: "query"
+        description: "Filter by assignee ID"
+        required: false
+        type: "string"
+      - name: "critcal"
+        type: "string"
+        enum:
+        - "HOT_FIX"
+        - "CRITICAL"
+        - "NORMAL"
+        in: "query"
+        description: "Filter by criticality"
+        required: false
+      - name: "sprint"
+        in: "query"
+        description: "Filter by sprint"
+        required: false
+        type: "string"
       responses:
         200:
-          description: "Successful operation"
+          description: "Successful operation returns 10 results ordered by critcality(high to low)) and created date(descending)"
           schema:
             $ref: '#/definitions/MissionList'
         default:
@@ -172,6 +201,7 @@ definitions:
         example: "team-id-123"
       critical:
         $ref: '#/definitions/Criticality'
+        default: "NORMAL"
       comments:
         type: array
         items:
@@ -215,9 +245,9 @@ definitions:
   Criticality:
     type: string
     x-extensible-enum:
-    - hot-fix
-    - critical
-    - normal
+    - HOT_FIX
+    - CRITICAL
+    - NORMAL
 
   MissionStatus:
     type: string
