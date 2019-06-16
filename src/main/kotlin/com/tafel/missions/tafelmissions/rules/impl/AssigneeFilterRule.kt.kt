@@ -6,7 +6,7 @@ import com.tafel.missions.tafelmissions.utils.model.Filter
 import org.springframework.stereotype.Component
 
 @Component
-class AssigneeFilterRule() : FilterRule {
+class AssigneeFilterRule () : FilterRule {
     override fun isApplicable(filter: Filter): Boolean {
         return filter.assignee?.isNotBlank() ?: false
     }
