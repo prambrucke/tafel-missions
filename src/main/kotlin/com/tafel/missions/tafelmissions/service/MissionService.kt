@@ -28,7 +28,7 @@ class MissionService(
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = [Exception::class])
     fun createMission(teamId: String, mission: Mission) =
-            missionDao.createMission(teamId,mission)
+            missionDa.createMission(teamId,mission)
 
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = [Exception::class])
