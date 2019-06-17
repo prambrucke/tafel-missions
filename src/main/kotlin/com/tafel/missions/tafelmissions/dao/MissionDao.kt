@@ -63,8 +63,8 @@ class MissionDao(
 
     }
 
-    fun getMissionDetails(teamId: String, missionId: String? = null, filter: Filter? = null, cursor: BigInteger? = BigInteger.ONE): List<MissionDetail> {
-        val sqlParamMap = mutableMapOf("team_id" to teamId, "id" to missionId, "current_cursor" to cursor, "next_cursor" to cursor!!.add(BigInteger("9")))
+    fun getMissionDetails(teamId: String, missionId: String? = null, filter: Filter? = null, cursor: BigInteger = BigInteger.ONE): List<MissionDetail> {
+        val sqlParamMap = mutableMapOf("team_id" to teamId, "id" to missionId, "current_cursor" to cursor, "next_cursor" to cursor.add(BigInteger("9")))
         val queryMapPair = buildFilterQuery(filter, MissionSql.SELECT_MISSIONS, sqlParamMap)
         return namedParameterJdbcTemplate.query(queryMapPair.first,
                 queryMapPair.second, missionRowMapper)

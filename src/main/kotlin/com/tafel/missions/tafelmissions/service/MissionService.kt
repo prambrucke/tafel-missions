@@ -26,12 +26,12 @@ class MissionService(
     }
 
 
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = [Exception::class])
+    @Transactional
     fun createMission(teamId: String, mission: Mission) =
             missionDao.createMission(teamId,mission)
 
 
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = [Exception::class])
+    @Transactional
     fun updateMission(teamId: String, missionId: String, mission: Mission): MissionDetail {
         missionDao.updateMission(teamId, missionId, mission)
         return getMissionById(teamId, missionId)
