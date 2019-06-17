@@ -8,6 +8,7 @@ import com.tafel.missions.tafelmissions.rules.FilterRule
 import com.tafel.missions.tafelmissions.utils.model.Filter
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
@@ -21,6 +22,7 @@ class MissionDao(
     fun getAndUpdateNextMissionId(teamId: String) =
             namedParameterJdbcTemplate.queryForObject(MissionSql.GET_NEXT_MISSION_ID, mapOf("team_id" to teamId), String::class.java)
 
+    @Transactional
     fun createMission(teamId: String, mission: Mission): MissionDetail {
         val missionId = getAndUpdateNextMissionId(teamId)
         namedParameterJdbcTemplate.update(MissionSql.INSERT_MISSION, mapOf(
@@ -44,6 +46,7 @@ class MissionDao(
 
     }
 
+    @Transactional
     fun updateMission(teamId: String, missionId: String, mission: Mission) {
         namedParameterJdbcTemplate.update(MissionSql.UPDATE_MISSION, mapOf(
                 "id" to missionId,
