@@ -6,7 +6,7 @@ jdk:
 - oraclejdk8
 
 script:
-- ./gradlew build
+- ./gradlew clean build --info
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

@@ -71,7 +71,6 @@ class MissionDao(
     }
 
 
-    //TODO:This is can be improved
     private fun buildFilterQuery(filter: Filter?, query: String, queryMapper: MutableMap<String, Any?>): Pair<String, MutableMap<String, Any?>> {
         val dynamicQuery = filterRules
             .filter { it.isApplicable(filter!!) }
