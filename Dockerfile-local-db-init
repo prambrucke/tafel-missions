@@ -1,0 +1,2 @@
+FROM pierone.stups.zalan.do/acid/postgres:9.5.0-p1
+CMD "psql -U local-db -c CREATE DATABASE missions;"
