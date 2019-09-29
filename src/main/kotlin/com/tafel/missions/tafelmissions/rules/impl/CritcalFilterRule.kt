@@ -12,7 +12,7 @@ class CriticalFilterRule() : FilterRule {
     }
 
     override fun applyRule(filter: Filter, query: String, queryMapper: MutableMap<String, Any?>): String {
-        queryMapper.put("critical", filter.critical?.priority.toString())
+        queryMapper["critical"] = filter.critical?.priority.toString()
         return MissionSql.SELECT_MISSIONS_CRITICAL_FILTER
     }
 }

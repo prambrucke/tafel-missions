@@ -12,7 +12,7 @@ class AssigneeFilterRule () : FilterRule {
     }
 
     override fun applyRule(filter: Filter, query: String, queryMapper: MutableMap<String, Any?>): String {
-        queryMapper.put("assignee", filter.assignee!!)
+        queryMapper["assignee"] = filter.assignee!!
         return MissionSql.SELECT_MISSIONS_ASSIGNEE_FILTER
     }
 }

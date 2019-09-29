@@ -12,7 +12,7 @@ class SprintFilterRule() : FilterRule {
     }
 
     override fun applyRule(filter: Filter, query: String, queryMapper: MutableMap<String, Any?>): String {
-        queryMapper.put("sprint", filter.sprint!!)
+        queryMapper["sprint"] = filter.sprint!!
         return MissionSql.SELECT_MISSIONS_SPRINT_FILTER
     }
 }

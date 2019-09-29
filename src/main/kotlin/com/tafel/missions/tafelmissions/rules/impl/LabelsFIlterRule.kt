@@ -12,7 +12,7 @@ class LabelsFilterRule() : FilterRule {
     }
 
     override fun applyRule(filter: Filter, query: String, queryMapper: MutableMap<String, Any?>): String {
-        queryMapper.put("labels", filter.labels?.split(",")?.toTypedArray())
+        queryMapper["labels"] = filter.labels?.split(",")?.toTypedArray()
         return MissionSql.SELECT_MISSIONS_LABELS_FILTER
     }
 }
